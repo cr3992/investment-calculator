@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/js/bootstrap.min.js" integrity="sha512-fHY2UiQlipUq0dEabSM4s+phmn+bcxSYzXP4vAXItBvBHU7zAM/mkhCZjtBEIJexhOMzZbgFlPLuErlJF2b+0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css" integrity="sha512-Z/def5z5u2aR89OuzYcxmDJ0Bnd5V1cKqBEbvLOiUNWdg9PQeXVvXLI90SE4QOHGlfLqUnDNVAYyZi8UwUTmWQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Investment Calculator</title>
+  <style>
+    .form-control:focus{
+        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 0px rgba(255, 100, 255, 0.5);
+    }
+    input::-webkit-inner-spin-button {
+       -webkit-appearance: none;
+       margin: 0;
+    }
+        .custom-input{ 
+             background-color:#f2e5bc; 
+             border: none; 
+             text-align: center; 
+         } 
+         .custom-input:focus{ 
+             background-color: #f2e5bc; 
+         }
+  
+  
+  </style>
+</head>
+<body style="background-image:url('bg.png');" onload="load_savedItems()">
+  <div class="container text-dark">
+    <div class="row text-light" style="background-color:#173a55;">
+      <div class="col-8">
+        <h4 class="card-title text-left mt-2">Investment Calculator</h4>
+       </div>
+       <div class="col-2">
+        <a href="https://cr3992.github.io/tools/" class="text-light text-right"><span class="material-symbols-outlined mt-2" style="font-size:30px;">apps</span></a>
+      </div>
+       <div class="col-2">
+        <button class="text-right text-light" style="border:none;background-color:#173a55;" data-bs-toggle="modal" data-bs-target="#myModal"><span class="material-symbols-outlined mt-2" style="font-size:30px;">settings</span></button>
+      </div>
+    </div>
+    <div class="card bg-light rounded mt-1 shadow">
+        <div class="row mt-2 mx-1">
+            <input type="number" class="form-control" id="capital" step="0.01" min="0" placeholder="Enter your investment capital(Monthly)">
+        </div>
+        <div class="row text-center mt-2 mb-2 mx-1">
+            <button id="calculate" class="btn text-light" style="background-color:#173a55;">Calculate</button>
+        </div>
+    </div>
+
+
+        <div class="card rounded bg-light shadow mt-1">
+        <div class="row mt-1">
+          <div class="col-2">
+            <button class="btn text-success btn-sm" data-bs-toggle="modal" data-bs-target="#myModal1" onclick="show()" style="border:none;background-color:transparent;"><span class="material-symbols-outlined rounded" style="font-size:20px;">info</span></button>
+          </div>
+          <div class="col-9">
+            <h5>Investment Distributions:</h5>
+          </div>
+        </div>
+        <div class="row text-dark">
+            <div class="table-responsive" style="font-size:15px;">
+              <table class="table table-bordered text-center">
+                <tr>
+                  <thead class="table-danger table-sm">
+                    <tr>
+                      <th scope="col">Stocks Distribution (%)</th>
+                      <th scope="col">Monthly Investment (₹)</th>
+                      <th scope="col">Annual Investment (₹)</th>
+                    </tr>
+                  </thead>
+                </tr>
+                <tr>
+                  <td>ETF <br><i id="etf_p"></i></td>
+                  <td id="etf_mi"></td>
+                  <td id="etf_ai"></td>
+                </tr>
+                <tr>
+                  <td>Growth <br><i id="growth_p"></i></td>
+                  <td id="growth_mi"></td>
+                  <td id="growth_ai"></td>
+                </tr>
+                <tr>
+                  <td>Breakout <br><i id="breakout_p"></i></td>
+                  <td id="breakout_mi"></td>
+                  <td id="breakout_ai"></td>
+                </tr>
+                <tr>
+                  <td>Dividend <br><i id="dividend_p"></i></td>
+                  <td id="dividend_mi"></td>
+                  <td id="dividend_ai"></td>
+                </tr>
+                <tr>
+                  <td>Penny <br><i id="penny_p"></i></td>
+                  <td id="penny_mi"></td>
+                  <td id="penny_ai"></td>
+                </tr>
+                <tr class="table-success fw-bold">
+                  <td>Total <br><i id="total_p"></i></td>
+                  <td id="total_mi"></td>
+                  <td id="total_ai"></td>
+                </tr>
+              </table>
+            </div>
+        </div>
+        </div>
+
+        <div class="card rounded bg-light shadow mt-1">
+          <div class="row text-muted mt-1 mb-1">
+            <div class="col-8 text-center">
+              <span class="material-symbols-outlined" style="font-size:20px;vertical-align: middle;">menu_book</span>
+              <b style="font-size:12px;">Read Wealth Books & Strategies</b>
+            </div>
+            <div class="col-3 text-end">
+              <a href="books.html" class="btn btn-secondary btn-sm" style="font-size:12px;">Click</a>
+            </div>
+          </div>
+        </div>
+
+      <!-- The Modal -->
+      <div class="modal" id="myModal">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+            <span class="material-symbols-outlined" style="font-size:30px;">settings</span>
+            <h4 class="modal-title">Settings</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row g=0">
+                    <div class="col-6 border-end border-dark">
+                        <input type="text" class="form-control text-end custom-input bg-light-subtle" value="ETF Stocks" readonly>
+                        <input type="text" class="form-control text-end custom-input bg-light-subtle" value="Growth Stocks" readonly>
+                        <input type="text" class="form-control text-end custom-input bg-light-subtle" value="Breakout Stocks" readonly>
+                        <input type="text" class="form-control text-end custom-input bg-light-subtle" value="Dividend Stocks" readonly>
+                        <input type="text" class="form-control text-end custom-input bg-light-subtle" value="Penny Stocks" readonly>
+                    </div>
+                    <div class="col-3 px-0">
+                        <input type="text" class="form-control text-end custom-input bg-light-subtle" id="etf">
+                        <input type="text" class="form-control text-end custom-input bg-light-subtle" id="growth">
+                        <input type="text" class="form-control text-end custom-input bg-light-subtle" id="breakout">
+                        <input type="text" class="form-control text-end custom-input bg-light-subtle" id="dividend">
+                        <input type="text" class="form-control text-end custom-input bg-light-subtle" id="penny">
+                    </div>
+                    <div class="col-3 text-right px-0">
+                        <input class="form-control text-start custom-input bg-light-subtle" value="%" readonly>
+                        <input class="form-control text-start custom-input bg-light-subtle" value="%" readonly>
+                        <input class="form-control text-start custom-input bg-light-subtle" value="%" readonly>
+                        <input class="form-control text-start custom-input bg-light-subtle" value="%" readonly>
+                        <input class="form-control text-start custom-input bg-light-subtle" value="%" readonly>
+        
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Modal footer -->
+            <div class="modal-footer justify-content-center">
+            <button type="button" class="btn" data-bs-dismiss="modal" onclick="reset()" style="color:#ffffff;background-color:#cb1a1a;">Reset</button>
+            <button type="button" class="btn" data-bs-dismiss="modal" onclick="savePercentItems()" style="color:#ffffff;background-color:#20365d;">Save</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+          <!-- The Modal1 -->
+          <div class="modal" id="myModal1">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                <h4 class="modal-title">Stock Distribution</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="row" id="content">
+                        
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+
+    </div>
+  <script>
+    const calculateButton = document.getElementById('calculate');
+    const etf = document.getElementById('etf');
+    const growth = document.getElementById('growth');
+    const breakout = document.getElementById('breakout');
+    const dividend = document.getElementById('dividend');
+    const penny = document.getElementById('penny');
+    const etfResult = document.getElementById('etf_mi');
+    const growthResult = document.getElementById('growth_mi');
+    const breakoutResult = document.getElementById('breakout_mi');
+    const dividendResult = document.getElementById('dividend_mi');
+    const pennyResult = document.getElementById('penny_mi');
+    const totalResult = document.getElementById('total_mi');
+    const capitalInput = document.getElementById('capital');
+    const yearly_etfResult = document.getElementById('etf_ai');
+    const yearly_growthResult = document.getElementById('growth_ai');
+    const yearly_breakoutResult = document.getElementById('breakout_ai');
+    const yearly_dividendResult = document.getElementById('dividend_ai');
+    const yearly_pennyResult = document.getElementById('penny_ai');
+    const yearly_totalResult = document.getElementById('total_ai');
+    var etf_percentage=null;
+    var growth_percentage=null;
+    var breakout_percentage=null;
+    var dividend_percentage=null;
+    var penny_percentage=null;
+
+    if(localStorage.getItem("etf")!=null){
+      etf_percentage = localStorage.getItem("etf");
+      growth_percentage = localStorage.getItem("growth");
+      breakout_percentage = localStorage.getItem("breakout");
+      dividend_percentage = localStorage.getItem("dividend");
+      penny_percentage = localStorage.getItem("penny");
+      etf.value= etf_percentage;
+      growth.value = growth_percentage;
+      breakout.value = breakout_percentage;
+      dividend.value = dividend_percentage;
+      penny.value = penny_percentage;
+      setPercentage();
+    }else{
+      setDefault();
+    }
+
+    function show(){
+      const contentDiv = document.getElementById('content');
+      const filePath = 'stocksDistribution.txt';
+
+    fetch(filePath)
+        .then(response => response.text())
+        .then(text => {
+            contentDiv.innerHTML = text;
+            contentDiv.style.textAlign="justify";
+        })
+        .catch(error => {
+            console.error('Error loading content:', error);
+        });
+    }
+    function setDefault(){
+      etf_percentage="20";
+      growth_percentage="60";
+      breakout_percentage="10";
+      dividend_percentage="8";
+      penny_percentage="2";
+      etf.value= etf_percentage;
+      growth.value = growth_percentage;
+      breakout.value = breakout_percentage;
+      dividend.value = dividend_percentage;
+      penny.value = penny_percentage;
+      setPercentage();
+    }
+   
+    function reset(){
+      localStorage.removeItem("etf");
+      localStorage.removeItem("growth");
+      localStorage.removeItem("breakout");
+      localStorage.removeItem("dividend");
+      localStorage.removeItem("penny");
+      setDefault();
+      location.reload();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        calculateButton.addEventListener('click', () => {
+          if (capitalInput.value==""){
+            alert("Enter some values!");
+            return;
+          }
+          const capital = parseFloat(capitalInput.value);
+          localStorage.setItem("capital",capitalInput.value);
+          capitalInput.value="";
+          const etfAmount = Math.min((Number(etf_percentage)/100) * capital, capital);
+          const growthAmount = Math.min((Number(growth_percentage)/100) * capital, capital - etfAmount);
+          const breakoutAmount = Math.min((Number(breakout_percentage)/100) * capital, capital - etfAmount - growthAmount);
+          const dividendAmount = Math.min((Number(dividend_percentage)/100) * capital, capital - etfAmount - growthAmount - breakoutAmount);
+          const pennyAmount = Math.min((Number(penny_percentage)/100) * capital, capital - etfAmount - growthAmount - dividendAmount - breakoutAmount);
+          
+          const etf_amount=Math.ceil(etfAmount);
+          const growth_amount = Math.ceil(growthAmount);
+          const breakout_amount = Math.ceil(breakoutAmount);
+          const dividend_amount = Math.ceil(dividendAmount);
+          const penny_amount = capital-(etf_amount+growth_amount+dividend_amount+breakoutAmount);
+        
+          display(etf_amount,growth_amount,breakout_amount,dividend_amount,penny_amount);
+        });
+      });
+
+      function load_savedItems(){
+       capitalInput.value = Number(localStorage.getItem("capital"));
+       calculateButton.click();
+      }
+
+      function display(etf_amount,growth_amount,breakout_amount,dividend_amount,penny_amount){
+        etfResult.textContent = `₹${etf_amount.toLocaleString('en-US')}`;
+        growthResult.textContent = `₹${growth_amount.toLocaleString('en-US')}`;
+        breakoutResult.textContent = `₹${breakout_amount.toLocaleString('en-US')}`;
+        dividendResult.textContent = `₹${dividend_amount.toLocaleString('en-US')}`;
+        pennyResult.textContent = `₹${penny_amount.toLocaleString('en-US')}`;
+        totalResult.textContent = `₹${(etf_amount+growth_amount+dividend_amount+penny_amount+breakout_amount).toLocaleString('en-US')}`;
+        totalResult.style.fontStyle="italic";
+        yearly_etfResult.textContent = `₹${(etf_amount*12).toLocaleString('en-US')}`;
+        yearly_growthResult.textContent = `₹${(growth_amount*12).toLocaleString('en-US')}`;
+        yearly_breakoutResult.textContent = `₹${(breakout_amount*12).toLocaleString('en-US')}`;
+        yearly_dividendResult.textContent = `₹${(dividend_amount*12).toLocaleString('en-US')}`;
+        yearly_pennyResult.textContent = `₹${(penny_amount*12).toLocaleString('en-US')}`;
+        yearly_totalResult.textContent = `₹${((etf_amount+growth_amount+breakout_amount+dividend_amount+penny_amount)*12).toLocaleString('en-US')}`;
+      }
+
+      function setPercentage(){
+        var etf_p = document.getElementById("etf_p");
+        var growth_p = document.getElementById("growth_p");
+        var breakout_p = document.getElementById("breakout_p");
+        var dividend_p = document.getElementById("dividend_p");
+        var penny_p = document.getElementById("penny_p");
+        var total_p = document.getElementById("total_p");
+
+        etf_p.innerText = etf_percentage+"%";
+        growth_p.innerText = growth_percentage+"%";
+        breakout_p.innerText = breakout_percentage+"%";
+        dividend_p.innerText = dividend_percentage+"%";
+        penny_p.innerText = penny_percentage+"%";
+        total_p.innerText = String(Number(etf_percentage)+Number(growth_percentage)+Number(breakout_percentage)+Number(dividend_percentage)+Number(penny_percentage))+"%";
+
+      }
+      
+      function savePercentItems(){
+        if((Number(etf.value)+Number(growth.value)+Number(breakout.value)+Number(dividend.value)+Number(penny.value))>100){
+          alert("The total percentage should be equal to 100");
+        }else{
+          localStorage.setItem("etf",etf.value);
+          localStorage.setItem("growth",growth.value);
+          localStorage.setItem("breakout",breakout.value);
+          localStorage.setItem("dividend",dividend.value);
+          localStorage.setItem("penny",penny.value);
+          location.reload();
+        }
+        
+      }
+  </script>
+</body>
+</html>
